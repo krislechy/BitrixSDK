@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32526.322
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BitrixConsole", "BitrixConsole\BitrixConsole.csproj", "{8B322052-99BF-435D-9287-24A0CE865FDE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Yolva.Bitrix.OAuth2", "Yolva.Bitrix.OAuth2\Yolva.Bitrix.OAuth2.csproj", "{1DFBAB9A-DEEE-476A-AD83-8F2671A291FB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Yolva.Bitrix.Extensions", "Yolva.Bitrix.Extensions\Yolva.Bitrix.Extensions.csproj", "{28D30E24-724B-41E6-B5A1-4A556EBA86EE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Yolva.Bitrix.Client", "Yolva.Bitrix.Client\Yolva.Bitrix.Client.csproj", "{37ADE892-1FFA-4387-96AC-08D90312D30B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8B322052-99BF-435D-9287-24A0CE865FDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B322052-99BF-435D-9287-24A0CE865FDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B322052-99BF-435D-9287-24A0CE865FDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B322052-99BF-435D-9287-24A0CE865FDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DFBAB9A-DEEE-476A-AD83-8F2671A291FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DFBAB9A-DEEE-476A-AD83-8F2671A291FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DFBAB9A-DEEE-476A-AD83-8F2671A291FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DFBAB9A-DEEE-476A-AD83-8F2671A291FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28D30E24-724B-41E6-B5A1-4A556EBA86EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28D30E24-724B-41E6-B5A1-4A556EBA86EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28D30E24-724B-41E6-B5A1-4A556EBA86EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28D30E24-724B-41E6-B5A1-4A556EBA86EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37ADE892-1FFA-4387-96AC-08D90312D30B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37ADE892-1FFA-4387-96AC-08D90312D30B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37ADE892-1FFA-4387-96AC-08D90312D30B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37ADE892-1FFA-4387-96AC-08D90312D30B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EAB01973-A4F4-4F36-93B6-96E54697BF56}
+	EndGlobalSection
+EndGlobal
