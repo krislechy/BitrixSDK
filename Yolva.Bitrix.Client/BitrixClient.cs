@@ -9,12 +9,13 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Yolva.Bitrix.Client.Abstractions;
 using Yolva.Bitrix.Extensions;
 using Yolva.Bitrix.OAuth2;
 
 namespace Yolva.Bitrix.Client
 {
-    public class BitrixClient: IBitrixService
+    public class BitrixClient : BaseClient, IBitrixService
     {
         public AuthParameters AuthParam { get; }
         private Authentication authentication;
@@ -39,26 +40,28 @@ namespace Yolva.Bitrix.Client
         public string? member_id { get; private set; }
         [OAuthResponseAttribute, DefaultValue(null)]
         public int? user_id { get; private set; }
-        [OAuthResponseAttribute,DefaultValue(null)]
+        [OAuthResponseAttribute, DefaultValue(null)]
         public string? refresh_token { get; private set; }
         #endregion
+        private object sync = new object();
         public bool isExpired
         {
             get
             {
-                var nowDt = DateTime.Now;
-                var _expires = expires.TimeStampToDateTime();
-                return (nowDt - _expires).TotalSeconds >= 0;
+                lock (sync)
+                {
+                    var nowDt = DateTime.Now;
+                    var _expires = expires.TimeStampToDateTime();
+                    return (nowDt - _expires).TotalSeconds >= 0 - TimeSpan.FromMinutes(5).TotalSeconds;
+                }
             }
         }
-        private readonly HttpClient client;
         public BitrixClient(AuthParameters authParam)
         {
             this.AuthParam = authParam;
             Connect();
-            this.client = new HttpClient();
         }
-        #region ClientForming
+        #region ClientApply
         private void applyAuthObj(string tokenObj)
         {
             var jtoken = JToken.Parse(tokenObj);
@@ -76,10 +79,10 @@ namespace Yolva.Bitrix.Client
             var properties = getOAuthProperties();
             var typeCurrentInstance = this.GetType();
             foreach (var property in properties)
-            { 
+            {
                 typeCurrentInstance.
                     InvokeMember(
-                    property.Name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.SetProperty | BindingFlags.Instance, 
+                    property.Name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.SetProperty | BindingFlags.Instance,
                     null, this, new object[] { null });
             }
         }
@@ -100,15 +103,15 @@ namespace Yolva.Bitrix.Client
             var property = this.GetType().GetProperty(propertyName);
             if (value is T)
                 property?.SetValue(this, value);
-            else throw new Exception($"Cannot cast {(value==null?"null":value)} to {nameof(T)}");
+            else throw new Exception($"Cannot cast {(value == null ? "null" : value)} to {nameof(T)}");
         }
         private IEnumerable<PropertyDescriptor> getOAuthProperties() =>
             TypeDescriptor.GetProperties(this)
               .Cast<PropertyDescriptor>()
               .Where(x => x.Attributes.OfType<OAuthResponseAttribute>().Any());
-        private void checkLifeTimeToken(HttpResponseMessage? message = null)
+        private void checkLifeTimeToken()
         {
-            if (isExpired | message?.StatusCode == HttpStatusCode.Unauthorized)
+            if (isExpired)
                 Connect(refresh_token);
         }
         private void Connect(string? refreshToken = null)
@@ -126,17 +129,62 @@ namespace Yolva.Bitrix.Client
         #region Service
         public async Task<T?> RetrieveListAsync<T>(Bitrix24QueryBuilder query)
         {
-            if (query==null) throw new ArgumentNullException(nameof(query));
-            if (String.IsNullOrEmpty(query.Command?.Trim())) throw new ArgumentNullException(nameof(query.Command));
-            var sCom = query.Command.Split(".");
-            if (sCom.Last().ToLower() != "list")
-                throw new Exception($"Command should be end on \"list\"");
-
-            var jsonRequest = new StringContent(query.Create(), Encoding.UTF8, "application/json");
-            var get = await client.PostAsync($"{AuthParam.site.Host}rest/{query.Command}?auth={access_token}", jsonRequest);
-            var content = await get.Content.ReadAsStringAsync();
-            var entities = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(content);
-            return entities;
+            if (query == null) throw new ArgumentNullException(nameof(query));
+            checkCommand(query.Command, "list");
+            checkLifeTimeToken();
+            var response = await CreateRequest(AuthParam.site.Host, query.Command, query.Create(), access_token);
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var entities = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(content);
+                return entities;
+            }
+            else throw new HttpRequestException($"Expected 200 status code, now: {(int)response.StatusCode}");
+        }
+        public async Task<long> Create<T>(string command, T? entity)
+        {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            checkCommand(command, "add");
+            checkLifeTimeToken();
+            var obj = new
+            {
+                fields = entity
+            };
+            var response = await CreateRequest(AuthParam.site.Host, command, obj, access_token);
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                return (JToken.Parse(content)["result"]).Value<long>();
+            }
+            else throw new HttpRequestException($"Expected 200 status code, now: {(int)response.StatusCode}");
+        }
+        public async Task Update<T>(string command, T? entity)
+        {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            checkCommand(command, "update");
+            checkLifeTimeToken();
+            var id = checkRequireProperty<long>(entity, "ID");
+            var obj = new
+            {
+                id = id,
+                fields = entity
+            };
+            var response = await CreateRequest(AuthParam.site.Host, command, obj, access_token);
+            if (!response.IsSuccessStatusCode)
+                throw new HttpRequestException($"Expected 200 status code, now: {(int)response.StatusCode}");
+        }
+        public async Task Delete(string command, long id)
+        {
+            checkCommand(command, "delete");
+            checkLifeTimeToken();
+            if (equalGeneric(id, default(long))) throw new Exception("ID cannot be null or 0");
+            var obj = new
+            {
+                id = id
+            };
+            var response = await CreateRequest(AuthParam.site.Host, command, obj, access_token);
+            if (!response.IsSuccessStatusCode)
+                throw new HttpRequestException($"Expected 200 status code, now: {(int)response.StatusCode}");
         }
         #endregion
     }

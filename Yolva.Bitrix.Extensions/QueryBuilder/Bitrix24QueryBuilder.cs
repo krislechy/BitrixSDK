@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Yolva.Bitrix.Extensions
 {
+    public class QueryList
+    {
+
+    }
     public enum OrderEnum
     {
         ASC,

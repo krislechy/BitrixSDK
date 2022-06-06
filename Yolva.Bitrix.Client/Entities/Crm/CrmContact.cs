@@ -8,7 +8,7 @@ namespace Yolva.Bitrix.Client.Entities.Crm
 {
     public class CrmContact
     {
-        public string ID { get; set; }
+        public long ID { get; set; }
         public string POST { get; set; }
         public object COMMENTS { get; set; }
         public object HONORIFIC { get; set; }
@@ -27,8 +27,8 @@ namespace Yolva.Bitrix.Client.Entities.Crm
         public string HAS_PHONE { get; set; }
         public string HAS_EMAIL { get; set; }
         public string HAS_IMOL { get; set; }
-        public DateTime DATE_CREATE { get; set; }
-        public DateTime DATE_MODIFY { get; set; }
+        public DateTime? DATE_CREATE { get; set; }
+        public DateTime? DATE_MODIFY { get; set; }
         public string ASSIGNED_BY_ID { get; set; }
         public string CREATED_BY_ID { get; set; }
         public string MODIFY_BY_ID { get; set; }
@@ -50,25 +50,6 @@ namespace Yolva.Bitrix.Client.Entities.Crm
         public object UTM_CAMPAIGN { get; set; }
         public object UTM_CONTENT { get; set; }
         public object UTM_TERM { get; set; }
-        public string UF_CRM_1651072052487 { get; set; }
-        public string UF_CRM_1651072592783 { get; set; }
-        public string UF_CRM_1651072611458 { get; set; }
-        public string UF_CRM_1651072629406 { get; set; }
-        public string UF_CRM_1651072651716 { get; set; }
-        public string UF_CRM_1651072675328 { get; set; }
-        public string UF_CRM_1651072757837 { get; set; }
-        public string UF_CRM_1651126438417 { get; set; }
-        public IEnumerable<object> UF_CRM_1652255529617 { get; set; }
-        public string UF_CRM_1653028466683 { get; set; }
-        public string UF_CRM_1653028481172 { get; set; }
-        public string UF_CRM_1653304186684 { get; set; }
-        public string UF_CRM_1654007527292 { get; set; }
-        public string UF_CRM_1654081507849 { get; set; }
-        public string UF_CRM_629891F140A30 { get; set; }
-        public string UF_CRM_629891F19E33F { get; set; }
-        public string UF_CRM_629891F203511 { get; set; }
-        public string UF_CRM_629891F260CAB { get; set; }
-        public string UF_CRM_629891F2BD37C { get; set; }
         public IEnumerable<EMAIL> EMAIL { get; set; }
     }
 }

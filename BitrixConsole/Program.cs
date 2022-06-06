@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using Yolva.Bitrix.Client;
+using Yolva.Bitrix.Client.Abstractions;
 using Yolva.Bitrix.Client.Entities;
 using Yolva.Bitrix.Client.Entities.Crm;
 using Yolva.Bitrix.Extensions;
@@ -25,12 +27,25 @@ namespace BitrixSDK
                 ) as IBitrixService;
             var query = new Bitrix24QueryBuilder("crm.contact.list")
                         .Order("DATE_CREATE", OrderEnum.ASC)
-                        //.AddFilter("ID", "27730")
-                        .AddFilter("%NAME", "Кон")
-                        .AddFilter("%LAST_NAME", "Ба")
-                        .AddSelect("NAME", "EMAIL");
-            var result = client.RetrieveListAsync<BitrixResponse<CrmContact>>(query).GetAwaiter().GetResult();
+                        .AddFilter("ID", "27730")
+                        //.AddFilter("%NAME", "Кон")
+                        //.AddFilter("%LAST_NAME", "Ба")
+                        .AddSelect("NAME", "EMAIL", "UF_CRM_1654007527292");
+            var result = client.RetrieveListAsync<BitrixResponse<Gavno>>(query).GetAwaiter().GetResult();
 
+            var test = new CrmContact()
+            {
+                
+                NAME = "loh",
+            };
+
+            client.Create("crm.contact.add",test).GetAwaiter().GetResult();
         }
+    }
+
+    public class Gavno:CrmContact
+    {
+        [JsonProperty("UF_CRM_1654007527292")]
+        public DateTime? VersionUpload { get; set; }
     }
 }
