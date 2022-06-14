@@ -43,7 +43,7 @@ client.CreateAsync<CrmContactAdvanced>("crm.contact.add",new CrmContactAdvanced
             {
                 NAME ="loh",
                 LAST_NAME="pidor"
-            })
+            });
 ```
 Update (example: Crm.Contact):
 ```cs
@@ -52,7 +52,7 @@ await client.UpdateAsync<CrmContactAdvanced>("crm.contact.update",new CrmContact
                 ID= 42055,
                 NAME ="loh",
                 LAST_NAME="pidor"
-            })
+            });
 ```
 Delete (example: Crm.Contact):
 ```cs
