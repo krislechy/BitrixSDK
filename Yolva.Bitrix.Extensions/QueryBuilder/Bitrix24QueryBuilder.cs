@@ -41,6 +41,7 @@ namespace Yolva.Bitrix.Extensions
         private List<QueryFilter> filters;
         private List<string> selectors;
         private QueryOrder? order;
+        private int? start=0;
         public Bitrix24QueryBuilder(string command)
         {
             this.Command = command;
@@ -65,6 +66,11 @@ namespace Yolva.Bitrix.Extensions
             this.order = new QueryOrder(key, order);
             return this;
         }
+        public Bitrix24QueryBuilder Start(int start)
+        {
+            this.start = start;
+            return this;
+        }
         /// <summary>
         /// * - все поля
         /// </summary>
@@ -79,6 +85,10 @@ namespace Yolva.Bitrix.Extensions
         public string Create()
         {
             var sb = new StringBuilder();
+            if(start!=null)
+            {
+                sb.Append("\"start\":" + start + ",");
+            }
             if (order != null)
                 sb.Append("\"order\": { \""+order.Value.Key+ "\": \"" + order.Value.Value+ "\" },");
             if (filters != null)

@@ -38,10 +38,10 @@ namespace Yolva.Bitrix.Client
             var type = obj.GetType();
             return type.GetProperty(propertyName);
         }
-        protected T checkRequireProperty<T>(object obj, string propertyName)
+        protected T checkRequiredProperty<T>(object obj, string propertyName)
         {
             var property = getProperty(obj, propertyName);
-            if (property == null) throw new Exception($"Required property \"{propertyName}\" do not exist");
+            if (property == null) throw new Exception($"Required property \"{propertyName}\" doesn't exist");
             var value = (T?)property.GetValue(obj);
             if (equalGeneric(value, default(T))) throw new Exception($"Value {propertyName} (required) is null");
             return (T)value;
@@ -55,5 +55,56 @@ namespace Yolva.Bitrix.Client
                 throw new Exception($"Command should be end on \"{expectedEnd}\"");
         }
         #endregion
+        #region ClientApply
+        private void setProperty<T>(string propertyName, T? value, object instance)
+        {
+            var property = instance.GetType().GetProperty(propertyName);
+            if (value is T)
+                property?.SetValue(instance, value);
+            else throw new Exception($"Cannot cast {(value == null ? "null" : value)} to {nameof(T)}");
+        }
+        protected void setValue<T>(JToken jt, string propertyName, object instance)
+        {
+            if (jt != null)
+            {
+                var jv = jt[propertyName];
+                if (jv != null)
+                {
+                    var value = jv.Value<T>();
+                    setProperty<T>(propertyName, value, instance);
+                }
+            }
+        }
+        protected void clearOAuthProperties(object instance)
+        {
+            var properties = getOAuthProperties();
+            var typeCurrentInstance = instance.GetType();
+            foreach (var property in properties)
+            {
+                typeCurrentInstance.
+                    InvokeMember(
+                    property.Name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.SetProperty | BindingFlags.Instance,
+                    null, instance, new object[] { null });
+            }
+        }
+        protected void applyAuthObj(string tokenObj, object instance)
+        {
+            var jtoken = JToken.Parse(tokenObj);
+            var typeCurrentInstance = instance.GetType();
+            var setValueMethod = typeCurrentInstance.GetMethod(nameof(setValue), BindingFlags.NonPublic | BindingFlags.Instance);
+            var properties = getOAuthProperties();
+            foreach (var property in properties)
+            {
+                var genericMethod = setValueMethod?.MakeGenericMethod(property.PropertyType);
+                genericMethod?.Invoke(instance, new object[] { jtoken, property.Name, instance });
+            }
+        }
+        private IEnumerable<PropertyDescriptor> getOAuthProperties() =>
+    TypeDescriptor.GetProperties(typeof(BitrixClient))
+      .Cast<PropertyDescriptor>()
+      .Where(x => x.Attributes.OfType<TokenRepresentAttribute>().Any());
+        #endregion
+
+        protected string getStringJToken(string content) => JToken.Parse(content).ToString();
     }
 }

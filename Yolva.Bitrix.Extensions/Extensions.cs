@@ -1,4 +1,6 @@
-﻿namespace Yolva.Bitrix.Extensions
+﻿using System.ComponentModel;
+
+namespace Yolva.Bitrix.Extensions
 {
     public static class Extensions
     {
@@ -14,6 +16,29 @@
             if (timestamp == null) return dateTime;
             dateTime = dateTime.AddSeconds(timestamp.Value).ToLocalTime();
             return dateTime;
+        }
+        public static string RemoveWhitespace(this string input)
+        {
+            return new string(input.ToCharArray()
+                .Where(c => !Char.IsWhiteSpace(c))
+                .ToArray());
+        }
+        public static T Convert<T>(this string input)
+        {
+            try
+            {
+                var converter = TypeDescriptor.GetConverter(typeof(T));
+                if (converter != null)
+                {
+                    // Cast ConvertFromString(string text) : object to (T)
+                    return (T)converter.ConvertFromString(input);
+                }
+                return default(T);
+            }
+            catch (NotSupportedException)
+            {
+                return default(T);
+            }
         }
     }
 }

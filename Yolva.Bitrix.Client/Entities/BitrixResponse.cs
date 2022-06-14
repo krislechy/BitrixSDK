@@ -10,6 +10,7 @@ namespace Yolva.Bitrix.Client.Entities
     {
         public IEnumerable<T> result { get; set; }
         public int total { get; set; }
+        public int? next { get; set; }
         public Time time { get; set; }
     }
 }

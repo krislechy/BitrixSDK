@@ -23,7 +23,7 @@ namespace Yolva.Bitrix.Client.Abstractions
         /// <param name="command"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        Task<long> Create<T>(string command, T entity);
+        Task<TResponse> CreateAsync<TEntity, TResponse>(string command, TEntity? entity, long? id = null);
         /// <summary>
         /// crm.contact.update
         /// </summary>
@@ -31,13 +31,13 @@ namespace Yolva.Bitrix.Client.Abstractions
         /// <param name="command"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        Task Update<T>(string command, T? entity);
+        Task UpdateAsync<T>(string command, T? entity);
         /// <summary>
         /// crm.contact.delete
         /// </summary>
         /// <param name="command"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task Delete(string command, long id);
+        Task DeleteAsync(string command, long id);
     }
 }

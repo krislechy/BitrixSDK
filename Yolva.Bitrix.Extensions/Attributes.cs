@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace Yolva.Bitrix.Extensions
 {
     [System.AttributeUsage(System.AttributeTargets.Property)]
-    public class OAuthResponseAttribute : System.Attribute
+    public class TokenRepresentAttribute : System.Attribute
     {
-        public OAuthResponseAttribute()
+        public TokenRepresentAttribute()
         {
 
         }

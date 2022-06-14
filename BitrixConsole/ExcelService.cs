@@ -43,11 +43,11 @@ namespace BitrixConsole
             SourceOfInterest = (string?)excelWorksheet.Cells[row, 13].Value,
 
             Temp = (string?)excelWorksheet.Cells[row, 14].Value,
-            IsMarkedAsGarbadge = (string?)excelWorksheet.Cells[row, 15].Value == "True" ? true : false,
-            IsWasUpdateInBitrix = (string?)excelWorksheet.Cells[row, 16].Value == "True" ? true : false,
-            IsCreatedInBitrix = (string?)excelWorksheet.Cells[row, 17].Value == "True" ? true : false,
-            IsFullMatch = (string?)excelWorksheet.Cells[row, 18].Value == "True" ? true : false,
-            IsPartialMatch = (string?)excelWorksheet.Cells[row, 19].Value == "True" ? true : false,
+            IsMarkedAsGarbadge = (string?)excelWorksheet.Cells[row, 15].Value?.ToString()?.ToLower() == "true" ? true : false,
+            IsEmailMatch = (string?)excelWorksheet.Cells[row, 16].Value?.ToString()?.ToLower() == "true" ? true : false,
+            IsFIOPhoneMatch = (string?)excelWorksheet.Cells[row, 17].Value?.ToString()?.ToLower() == "true" ? true : false,
+            IdInBitrix = (string?)excelWorksheet.Cells[row, 18].Value?.ToString(),
+            IsInvalidEmail = (string?)excelWorksheet.Cells[row, 19].Value?.ToString()?.ToLower() == "true" ? true : false,
         };
         public void WriteContact(Contact contact)
         {
@@ -69,10 +69,10 @@ namespace BitrixConsole
 
             excelWorksheet.Cells[contact.RowId, 14].Value = contact.Temp;
             excelWorksheet.Cells[contact.RowId, 15].Value = contact.IsMarkedAsGarbadge.ToString();
-            excelWorksheet.Cells[contact.RowId, 16].Value = contact.IsWasUpdateInBitrix.ToString();
-            excelWorksheet.Cells[contact.RowId, 17].Value = contact.IsCreatedInBitrix.ToString();
-            excelWorksheet.Cells[contact.RowId, 18].Value = contact.IsFullMatch.ToString();
-            excelWorksheet.Cells[contact.RowId, 19].Value = contact.IsPartialMatch.ToString();
+            excelWorksheet.Cells[contact.RowId, 16].Value = contact.IsEmailMatch.ToString();
+            excelWorksheet.Cells[contact.RowId, 17].Value = contact.IsFIOPhoneMatch.ToString();
+            excelWorksheet.Cells[contact.RowId, 18].Value = contact.IdInBitrix;
+            excelWorksheet.Cells[contact.RowId, 19].Value = contact.IsInvalidEmail.ToString();
         }
         public IEnumerable<Contact> ReadAllContacts(int startRow = 2)
         {

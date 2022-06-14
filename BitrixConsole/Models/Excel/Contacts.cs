@@ -16,6 +16,7 @@ namespace BitrixConsole.Models.Excel
         public string? MobilePhone { get; set; }
         public string? WorkPhone { get; set; }
         public string? WorkEmail { get; set; }
+        [Obsolete]
         public string? PersonalEmail { get; set; }
         public string? AreaOfResponsibility { get; set; }
         public string? CompanyName { get; set; }
@@ -24,9 +25,9 @@ namespace BitrixConsole.Models.Excel
         public string? SourceOfInterest { get; set; }
         public string? Temp { get; set; }
         public bool IsMarkedAsGarbadge { get; set; } = false;
-        public bool IsWasUpdateInBitrix { get; set; } = false;
-        public bool IsCreatedInBitrix { get; set; } = false;
-        public bool IsFullMatch { get; set; } = false;
-        public bool IsPartialMatch { get; set; } = false;
+        public bool IsEmailMatch { get; set; } = false;
+        public bool IsFIOPhoneMatch { get; set; } = false;
+        public string? IdInBitrix { get; set; } = null;
+        public bool IsInvalidEmail { get; set; } = false;
     }
 }
