@@ -5,7 +5,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Version>0.1.100-alpha</Version>
+		<Version>0.1.200-alpha</Version>
 		<Authors>krislechy</Authors>
 		<Copyright>krislechy</Copyright>
 		<PackageProjectUrl>https://github.com/krislechy/BitrixSDK/</PackageProjectUrl>
