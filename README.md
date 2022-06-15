@@ -1,4 +1,4 @@
-# BitrixSDK
+# Bitrix SDK lite
 Create Client:
 ```cs
 public IBitrixService BitrixCreateClient()
@@ -34,7 +34,7 @@ do
   query.Start(next);
   response = await client.RetrieveListAsync<BitrixResponse<CrmContactAdvanced>>(query);
   contacts.AddRange(response?.result);
-  next += 50;//max step 50
+  next += 50;//max records on one page = 50
 } while (response.next != null && response.next > 0);
 ```
 Create (example: Crm.Contact):
