@@ -1,16 +1,15 @@
-# BitrixSDK
+# Bitrix SDK lite
 Create Client:
 ```cs
 public IBitrixService BitrixCreateClient()
 {
-      var configCredential = configuration.GetSection("Credential");
-      var credential = new System.Net.NetworkCredential(configCredential["login"], configCredential["password"]);
+      var credential = new System.Net.NetworkCredential("login", "password");
       return new BitrixClient(
           new AuthParameters(
-              new Site24(configuration["Url"]),
+              new Site24("Url"),
               credential,
-              configuration["ClientId"],
-              configuration["ClientSecret"])
+              "ClientId",
+              "ClientSecret")
           ) as IBitrixService;
 }
 ```
@@ -34,7 +33,7 @@ do
   query.Start(next);
   response = await client.RetrieveListAsync<BitrixResponse<CrmContactAdvanced>>(query);
   contacts.AddRange(response?.result);
-  next += 50;//max step 50
+  next += 50;//max records on one page = 50
 } while (response.next != null && response.next > 0);
 ```
 Create (example: Crm.Contact):
@@ -43,7 +42,7 @@ client.CreateAsync<CrmContactAdvanced>("crm.contact.add",new CrmContactAdvanced
             {
                 NAME ="loh",
                 LAST_NAME="pidor"
-            })
+            });
 ```
 Update (example: Crm.Contact):
 ```cs
@@ -52,7 +51,7 @@ await client.UpdateAsync<CrmContactAdvanced>("crm.contact.update",new CrmContact
                 ID= 42055,
                 NAME ="loh",
                 LAST_NAME="pidor"
-            })
+            });
 ```
 Delete (example: Crm.Contact):
 ```cs
