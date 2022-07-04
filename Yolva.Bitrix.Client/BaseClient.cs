@@ -47,12 +47,12 @@ namespace Yolva.Bitrix.Client
             return (T)value;
         }
         protected bool equalGeneric<T>(T t1, T t2) => EqualityComparer<T>.Default.Equals(t1, t2);
-        protected void checkCommand(string command, string expectedEnd)
+        protected void checkCommand(string command, params string[] expectedEnd)
         {
             if (String.IsNullOrEmpty(command?.Trim())) throw new ArgumentNullException(nameof(command));
             var sCom = command.Split(".");
-            if (sCom.Last().ToLower() != expectedEnd)
-                throw new Exception($"Command should be end on \"{expectedEnd}\"");
+            if (!expectedEnd.Any(x => x == sCom.Last().ToLower()))
+                throw new Exception($"Command should be end on \"{string.Join(",", expectedEnd)}\"");
         }
         #endregion
         #region ClientApply

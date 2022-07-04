@@ -84,7 +84,7 @@ namespace BitrixConsole
             configuration = new ConfigurationBuilder()
                         .AddJsonFile("appsettings.json")
                         .Build();
-            cachedClients = new CachedClients<IBitrixService>(()=>BitrixCreateClient());
+            //cachedClients = new CachedClients<IBitrixService>(()=>BitrixCreateClient());
         }
 
         public static void Main(string[] args)
@@ -92,6 +92,17 @@ namespace BitrixConsole
             //OldAlgh().GetAwaiter().GetResult();//1
             //Upload();
             //RemoveAllWithoutConnected().GetAwaiter().GetResult();
+            var client = BitrixCreateClient();
+
+            var obj = new
+            {
+                ENTITY_ID = 42077,
+                ENTITY_TYPE="contact",
+                COMMENT="test 123",
+
+            };
+            var t=client.CreateAsync<object,object>("crm.timeline.comment.add", obj).Result;
+
         }
         #region retrievedAll
         public static async Task<List<CrmContactAdvanced>> RetrievedAllContacts()
@@ -216,7 +227,6 @@ namespace BitrixConsole
             excel.Save();
         }
         #endregion
-
         private static List<CrmContactAdvanced> GetConnectedContacts()
         {
             List<CrmContactAdvanced> dict = new List<CrmContactAdvanced>();

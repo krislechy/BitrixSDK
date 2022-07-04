@@ -87,7 +87,7 @@ namespace Yolva.Bitrix.Client
         public async Task<T?> RetrieveListAsync<T>(Bitrix24QueryBuilder query)
         {
             if (query == null) throw new ArgumentNullException(nameof(query));
-            checkCommand(query.Command, "list");
+            checkCommand(query.Command, "list","fields");
             checkLifeTimeToken();
             var response = await CreateRequest(AuthParam.site.Host, query.Command, query.Create(), access_token);
             var content = await response.Content.ReadAsStringAsync();
@@ -102,7 +102,7 @@ namespace Yolva.Bitrix.Client
         public async Task<TResponse?> CreateAsync<TEntity, TResponse>(string command, TEntity? entity, long? id = null)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
-            checkCommand(command, "add");
+            checkCommand(command, "add","bind","unbind");
             checkLifeTimeToken();
             var requestContent = new RequestContentBitrix<TEntity>()
             {
